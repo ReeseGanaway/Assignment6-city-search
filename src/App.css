@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+#ZipArray {
+  position: relative; /* add this line */
+  width: 100%;
+  height: 100%;
+  overflow-wrap: break-word;
+}
