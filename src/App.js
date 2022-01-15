@@ -7,35 +7,46 @@ import React, {useState} from "react";
 
 
   const [zipList, setZipList]=useState([]);
-  const[loading, setLoading]=useState(false);
+  const[loading, setLoading]=useState(true);
+  const[cityName,setCityName]=useState("(Enter a valid city name)")
+  let nameHolder = ""
 
   
 
   const checkEntry = (event) => {
     
+
       fetch(`http://ctp-zip-api.herokuapp.com/city/${event.target.value.toUpperCase()}`).then((response)=>{
         response.json().then((data)=>{
           setZipList(data)
-          setLoading(true)
-          //console.log(loading)
-        //console.log(zipList)
+          setLoading(false)
+        nameHolder=event.target.value.toLowerCase();
+  nameHolder=nameHolder.charAt(0).toUpperCase() + nameHolder.slice(1);
+  setCityName(nameHolder)
         })
         
       })
-      .catch((err)=>console.error(err)) 
+      .catch((err)=>console.error(err),
+      setLoading(true), 
+      setCityName("(Enter a valid city name)")
+      )
       }
 
-      console.log(JSON.stringify(zipList))
   
   return (
     <div className="App">
       <header className="city-search">City Search</header>
 
-      <input type="text" onChange={checkEntry}></input>
-      <div id="ZipArray">{JSON.stringify(zipList)}</div>
-    </div>
+      <input type="text" id="Input" onChange={checkEntry}></input>
 
+      <div id="header-zips">
+      <header id="listHeader">Zipcodes in {cityName}</header>
+      {loading===false ? zipList.map((item)=>(
+      <div id="ZipArray">{item}</div>
+          )) : <div id="ZipArray"></div> }   </div>
+    </div>
   );
+
 }
 
 
